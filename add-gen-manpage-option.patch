@@ -1,0 +1,45 @@
+diff -Nur moblin-settings-2.21/configure.in moblin-settings-2.21-new/configure.in
+--- moblin-settings-2.21/configure.in	2008-09-06 05:15:33.000000000 +0800
++++ moblin-settings-2.21-new/configure.in	2008-09-10 15:39:50.000000000 +0800
+@@ -75,11 +75,18 @@
+ fi
+ AC_SUBST(GLIB_GENMARSHAL)
+ 
+-AC_PATH_PROG(DOCBOOK2MAN, docbook2man, no)
+-if test x"$DOCBOOK2MAN" = xno; then
+-  AC_MSG_ERROR([docbook2man executable not found in your path - should be installed with docbook-utils])
++# check for docbook2man
++AC_ARG_ENABLE(man,
++	[  --enable-man           Generate the man page (default yes)], ,
++	enable_man=yes)
++AM_CONDITIONAL(HAVE_MAN, test x$enable_man = xyes)
++if test "$enable_man" = "yes"; then
++	AC_PATH_PROG(DOCBOOK2MAN, docbook2man, no)
++	if test x"$DOCBOOK2MAN" = xno; then
++  		AC_MSG_ERROR([docbook2man executable not found in your path - should be installed with docbook-utils])
++	fi
++	AC_SUBST(DOCBOOK2MAN)
+ fi
+-AC_SUBST(DOCBOOK2MAN)
+ 
+ AC_MSG_CHECKING([if GLib is version 2.14.0 or newer])
+ if pkg-config --atleast-version=2.14.0 glib-2.0; then
+diff -Nur moblin-settings-2.21/moblin-system-daemon/Makefile.am moblin-settings-2.21-new/moblin-system-daemon/Makefile.am
+--- moblin-settings-2.21/moblin-system-daemon/Makefile.am	2008-09-06 05:15:33.000000000 +0800
++++ moblin-settings-2.21-new/moblin-system-daemon/Makefile.am	2008-09-10 15:37:02.000000000 +0800
+@@ -107,6 +107,7 @@
+ msd-infos.xml: $(dbus_xmlfiles)
+ 	cat $(dbus_xmlfiles) > $@
+ 
++if HAVE_MAN
+ man1_MANS = moblin-system-tool.1
+ 
+ moblin-system-tool.1: moblin-system-tool.sgml
+@@ -114,6 +115,7 @@
+ 
+ moblin-system-tool.sgml: $(sgml_manfiles)
+ 	cat $(sgml_manfiles) > $@
++endif
+ 
+ #Rule to generate the binding headers
+ moblin-system-server.h:  msd-infos.xml
