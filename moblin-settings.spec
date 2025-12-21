@@ -15,6 +15,8 @@ Requires(preun): chkconfig
 Requires(pre): /usr/bin/polkit-auth
 Requires(postun): coreutils
 
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
 BuildRequires: glib2-devel >= 2.6.0
 BuildRequires: dbus-devel  >= 0.90
 BuildRequires: dbus-glib-devel >= 0.70
