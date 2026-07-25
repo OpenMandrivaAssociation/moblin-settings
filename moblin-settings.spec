@@ -3,7 +3,7 @@
 Summary: Moblin System Settings
 Name: moblin-settings
 Version: 2.21
-Release: %mkrel 2.19
+Release: 3
 URL: https://moblin.org
 Source0: http://moblin.org/repos/releases/%{name}-%{version}.tar.gz
 Patch0: add-gen-manpage-option.patch
